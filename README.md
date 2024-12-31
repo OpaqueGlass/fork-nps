@@ -1,3 +1,24 @@
+
+本fork进行了如下更改：(未验证)
+
+1. 加入`ip_limit=true`后，通过后台网页临时许可ip；可通过`ip_limit_skip_local` `web_temp_white_password` `web_temp_white_hour` 控制；
+
+
+感谢 [yisier/nps](https://github.com/yisier/nps) [ehang-io/nps](https://github.com/ehang-io/nps)
+
+
+
+```
+conda create -n go -c conda-forge go=1.22
+conda activate go
+bash build.sh
+```
+
+
+以下是原README
+---
+
+
 # NPS
 
 [README](https://github.com/ehang-io/nps/blob/master/README.md)|[中文文档](https://github.com/ehang-io/nps/blob/master/README_zh.md)

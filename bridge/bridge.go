@@ -347,13 +347,19 @@ func (s *Bridge) SendLinkInfo(clientId int, link *conn.Link, t *file.Tunnel) (ta
 		//If ip is restricted to do ip verification
 		if s.ipVerify {
 			ip := common.GetIpByAddr(link.RemoteAddr)
-			if v, ok := s.Register.Load(ip); !ok {
-				return nil, errors.New(fmt.Sprintf("The ip %s is not in the validation list", ip))
-			} else {
-				if !v.(time.Time).After(time.Now()) {
-					return nil, errors.New(fmt.Sprintf("The validity of the ip %s has expired", ip))
+			ipVerifySkipLocal := beego.AppConfig.DefaultString("ip_limit_skip_local", "false")
+			if ip != "127.0.0.1" || (ip == "127.0.0.1" && ipVerifySkipLocal != "true") {
+				if v, ok := s.Register.Load(ip); !ok {
+					return nil, errors.New(fmt.Sprintf("The ip %s is not in the validation list", ip))
+				} else {
+					if !v.(time.Time).After(time.Now()) {
+						return nil, errors.New(fmt.Sprintf("The validity of the ip %s has expired", ip))
+					}
 				}
+			} else {
+				logs.Info("Skip IP Check due to local %s", ip)
 			}
+			
 		}
 		var tunnel *nps_mux.Mux
 		if t != nil && t.Mode == "file" {

@@ -62,6 +62,18 @@ func (self *LoginController) Verify() {
 	self.ServeJSON()
 }
 
+func (self *LoginController) White() {
+	password := self.GetString("password")
+	tempWhitePassWord := beego.AppConfig.DefaultString("web_temp_white_password", "false")
+	if password == beego.AppConfig.String("web_temp_white_password") and tempWhitePassWord != "false" {
+		server.Bridge.Register.Store(common.GetIpByAddr(self.Ctx.Input.IP()), time.Now().Add(time.Hour*time.Duration(24)))
+		self.Data["json"] = map[string]interface{}{"status": 1, "msg": "login success"}
+	} else {
+		self.Data["json"] = map[string]interface{}{"status": 0, "msg": "username or password incorrect"}
+	}
+	self.ServeJSON()
+}
+
 func (self *LoginController) doLogin(username, password string, explicit bool) bool {
 	clearIprecord()
 	ip, _, _ := net.SplitHostPort(self.Ctx.Request.RemoteAddr)

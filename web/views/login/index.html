@@ -52,6 +52,12 @@
                 <li langtag="info-feature8"></li>
                 <li langtag="info-feature9"></li>
             </ul>
+            <div>
+                <input name="temppassword" type="password" class="form-control" placeholder="password" required=""
+                               langtag="word-password" id="temp_white">
+                <button onclick="justIpLogin()" class="btn btn-primary block full-width m-b"
+                            langtag="word-login"></button>
+            </div>
         </div>
 
         <div class="col-md-6 mt-3">
@@ -111,6 +117,25 @@
                 } else {
                     alert(res.msg)
                 }
+            }
+        })
+        return false
+    }
+
+    function justIpLogin() {
+        $.ajax({
+            type: "POST",
+            url: "{{.web_base_url}}/login/white",
+            data: [
+                { name: "password", value: $("#temp_white").val() },
+                ],
+            success: function (res) {
+                alert(res.msg)
+                //     if (res.status) {
+                //     window.location.href = "{{.web_base_url}}/index/index"
+                // } else {
+                //     alert(res.msg)
+                // }
             }
         })
         return false
